@@ -1,0 +1,35 @@
+IP accounting kit for pcap-compatable systems.
+(C) 2001-2003 Geo Carncross (Internet Connection)
+
+requirements:
+	libpcap
+	mmap()/munmap()/msync()
+	signals
+
+
+./ipa-watch scoreboard interface [network/netmask | network netmask]
+	e.g. ipa-watch eth0-dump eth0
+
+	logs all traffic ON interface (same network) to the scoreboard.
+	the scoreboard is fixed size of 4*(2^(32-cidr))
+
+	SIGHUP		msync() the scoreboard
+	SIGTERM		sync and exit
+	SIGINT		sync and exit
+
+./ipa-dump [-r] scoreboard [network]
+	e.g. ipa-dump eth0-dump 192.168.1.0
+
+	-r resets the counters
+
+	writes all non-zero addresses to standard output. if a network-address
+	is supplied, all addresses will be relocated. e.g.
+
+	./ipa-dump eth0-dump
+	1 572
+	3 231
+
+	./ipa-dump eth0-dump 192.168.1.0
+	192.168.1.1 572
+	192.168.1.3 231
+
