@@ -65,6 +65,7 @@ static unsigned long need;
 static void parse_args(int argc, char *argv[])
 {
 	char *q;
+	int check;
 
 	if (argc < 4) {
 		fprintf(stderr, "Usage: %s scoreboard interface {network/mask | network mask}\n", argv[0]);
@@ -75,73 +76,8 @@ static void parse_args(int argc, char *argv[])
 	if (q) {
 		/* CIDR style subnet */
 		*q = 0; q++;
-		if (strcmp(q, "32") == 0) {
-			netmask = 0xFFFFFFFF;
-		} else if (strcmp(q, "31") == 0) {
-			netmask = 0xFFFFFFF7;
-		} else if (strcmp(q, "30") == 0) {
-			netmask = 0xFFFFFFF3;
-		} else if (strcmp(q, "29") == 0) {
-			netmask = 0xFFFFFFF1;
-		} else if (strcmp(q, "28") == 0) {
-			netmask = 0xFFFFFFF0;
-		} else if (strcmp(q, "27") == 0) {
-			netmask = 0xFFFFFF70;
-		} else if (strcmp(q, "26") == 0) {
-			netmask = 0xFFFFFF30;
-		} else if (strcmp(q, "25") == 0) {
-			netmask = 0xFFFFFF10;
-		} else if (strcmp(q, "24") == 0) {
-			netmask = 0xFFFFFF00;
-		} else if (strcmp(q, "23") == 0) {
-			netmask = 0xFFFFF700;
-		} else if (strcmp(q, "22") == 0) {
-			netmask = 0xFFFFF300;
-		} else if (strcmp(q, "21") == 0) {
-			netmask = 0xFFFFF100;
-		} else if (strcmp(q, "20") == 0) {
-			netmask = 0xFFFFF000;
-		} else if (strcmp(q, "19") == 0) {
-			netmask = 0xFFFF7000;
-		} else if (strcmp(q, "18") == 0) {
-			netmask = 0xFFFF3000;
-		} else if (strcmp(q, "17") == 0) {
-			netmask = 0xFFFF1000;
-		} else if (strcmp(q, "16") == 0) {
-			netmask = 0xFFFF0000;
-		} else if (strcmp(q, "15") == 0) {
-			netmask = 0xFFF70000;
-		} else if (strcmp(q, "14") == 0) {
-			netmask = 0xFFF30000;
-		} else if (strcmp(q, "13") == 0) {
-			netmask = 0xFFF10000;
-		} else if (strcmp(q, "12") == 0) {
-			netmask = 0xFFF00000;
-		} else if (strcmp(q, "11") == 0) {
-			netmask = 0xFF700000;
-		} else if (strcmp(q, "10") == 0) {
-			netmask = 0xFF300000;
-		} else if (strcmp(q, "9") == 0) {
-			netmask = 0xFF100000;
-		} else if (strcmp(q, "8") == 0) {
-			netmask = 0xFF000000;
-		} else if (strcmp(q, "7") == 0) {
-			netmask = 0xF7000000;
-		} else if (strcmp(q, "6") == 0) {
-			netmask = 0xF3000000;
-		} else if (strcmp(q, "5") == 0) {
-			netmask = 0xF1000000;
-		} else if (strcmp(q, "4") == 0) {
-			netmask = 0xF0000000;
-		} else if (strcmp(q, "3") == 0) {
-			netmask = 0x70000000;
-		} else if (strcmp(q, "2") == 0) {
-			netmask = 0x30000000;
-		} else if (strcmp(q, "1") == 0) {
-			netmask = 0x10000000;
-		} else if (strcmp(q, "0") == 0) {
-			netmask = 0x00000000;
-		} else {
+		netmask = (~0) << (32-(check=atoi(q)));
+		if(check < 0 || check > 32) {
 			fprintf(stderr, "Cannot parse subnet: /%s\n", q);
 			exit(1);
 		}
